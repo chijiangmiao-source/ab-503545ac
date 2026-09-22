@@ -10,3 +10,7 @@ __pycache__/
 .nox/
 *.pyc
 *.pyo
+
+# 本地工具缓存与构建产物
+.npm-cache/
+dist/

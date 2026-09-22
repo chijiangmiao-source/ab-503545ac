@@ -1,0 +1,393 @@
+:root {
+  --bg: #0f141b;
+  --panel: #161d27;
+  --panel-2: #1c2531;
+  --border: #2a3645;
+  --text: #dce4ee;
+  --muted: #8a99aa;
+  --accent: #4da3ff;
+  --ok: #37c46f;
+  --warn: #e6b450;
+  --err: #ef6a6a;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 24px 48px;
+}
+
+.app-header h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+.app-header .sub {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin-bottom: 16px;
+}
+
+.privacy-note {
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-bottom: 16px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+button {
+  background: var(--panel-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+.counts {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin-left: auto;
+}
+
+.editors {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr 200px;
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .editors {
+    grid-template-columns: 1fr;
+  }
+}
+
+.editor-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-card.has-error {
+  border-color: #7a3a3a;
+}
+
+.editor-head {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.editor-body {
+  display: flex;
+  max-height: 340px;
+}
+
+.gutter {
+  padding: 8px 6px 8px 10px;
+  text-align: right;
+  color: #4d5b6b;
+  background: var(--panel-2);
+  font: 12.5px/1.55 var(--mono);
+  user-select: none;
+  overflow: hidden;
+  white-space: pre;
+  min-width: 42px;
+}
+
+.gutter .ln-err {
+  color: var(--err);
+  font-weight: 700;
+}
+
+.gutter .ln-warn {
+  color: var(--warn);
+}
+
+textarea.code {
+  flex: 1;
+  resize: vertical;
+  min-height: 220px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  padding: 8px 12px;
+  font: 12.5px/1.55 var(--mono);
+  white-space: pre;
+  overflow: auto;
+}
+
+#editor-top textarea.code {
+  min-height: 60px;
+}
+
+#editor-top .editor-body {
+  max-height: 120px;
+}
+
+.section {
+  margin-top: 18px;
+}
+
+.status-banner {
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.status-banner.ok {
+  border-color: #2f6b46;
+}
+
+.status-banner.limited {
+  border-color: #8a6a25;
+  background: #241f14;
+}
+
+.status-banner.invalid {
+  border-color: #7a3a3a;
+  background: #261818;
+}
+
+.status-banner .big {
+  font-weight: 700;
+}
+
+.issues {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.issue {
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 6px;
+  background: var(--panel);
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.issue:hover {
+  background: var(--panel-2);
+}
+
+.issue.error {
+  border-left-color: var(--err);
+}
+
+.issue.warning {
+  border-left-color: var(--warn);
+}
+
+.issue .loc {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+  margin-right: 8px;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.card h2 {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+
+.cut-list {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  max-height: 360px;
+  overflow: auto;
+}
+
+.cut-row {
+  display: flex;
+  gap: 10px;
+  padding: 3px 0;
+  border-bottom: 1px solid #202a36;
+}
+
+.cut-row .idx {
+  color: var(--muted);
+  min-width: 46px;
+  text-align: right;
+}
+
+.cut-row .events {
+  color: #bfe0ff;
+}
+
+.role-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role-group h3 {
+  margin: 0 0 4px;
+  font-size: 12.5px;
+}
+
+.role-group .desc {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 11.5px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.tag.mandatory {
+  color: #9be8b8;
+  border-color: #2f6b46;
+}
+
+.tag.optional {
+  color: #ffd98f;
+  border-color: #8a6a25;
+}
+
+.tag.irrelevant {
+  color: var(--muted);
+}
+
+table.gates {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+table.gates th,
+table.gates td {
+  border-bottom: 1px solid #202a36;
+  padding: 5px 8px;
+  text-align: left;
+}
+
+table.gates th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+table.gates td.mono,
+table.gates th.mono {
+  font-family: var(--mono);
+}
+
+.pill {
+  font-size: 11.5px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.pill.ok {
+  color: var(--ok);
+  border-color: #2f6b46;
+}
+
+.pill.limited {
+  color: var(--warn);
+  border-color: #8a6a25;
+}
+
+.pill.muted {
+  color: var(--muted);
+}
+
+details.gate-cuts {
+  margin-top: 4px;
+}
+
+details.gate-cuts summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.muted-text {
+  color: var(--muted);
+}
+
+.limit-code {
+  font-family: var(--mono);
+  color: var(--warn);
+  font-weight: 700;
+}

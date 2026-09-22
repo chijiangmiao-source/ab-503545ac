@@ -1,0 +1,43 @@
+# 航天器供电故障树审计 —— 纯静态发布编排
+#
+# 宿主机端口通过环境变量 WEB_PORT 配置（默认 8080）：
+#   WEB_PORT=9090 docker compose up -d --build
+#
+# 一次性验证服务：
+#   docker compose build verify
+#   docker compose run --rm verify
+# 成功时退出码 0，任一检查失败退出码非 0。
+
+services:
+  web:
+    build:
+      context: .
+      target: runtime
+    image: sc-power-fta-web:latest
+    ports:
+      # 宿主机端口可配置，容器内固定监听 80
+      - "${WEB_PORT:-8080}:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://127.0.0.1/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  verify:
+    # 复用构建阶段镜像（含 node 与已安装依赖），不启动运行时服务
+    build:
+      context: .
+      target: builder
+    image: sc-power-fta-verify:latest
+    environment:
+      WEB_URL: http://web
+    volumes:
+      # 挂载当前源码执行测试与构建检查；node_modules 用匿名卷保留镜像内依赖
+      - ./:/app
+      - /app/node_modules
+    depends_on:
+      web:
+        condition: service_healthy
+    command: ["sh", "scripts/verify.sh"]
